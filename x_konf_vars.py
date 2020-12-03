@@ -24,11 +24,11 @@ def DefaultVariables():
     'SUPERPOSED':['True',   '# Has input PDB been pre-superposed to 1ATP ref residue?'],
     'MISSRES':  ['None',     '# User-input list of missing residue PDB, same directory to PDB'],
 
-    'USERRF':   ['False', '# Use R::randomForest instead of SKLearn RFClassifier (def: False)'],
-    'USESKL':   ['nn',    '# Use SKLearn ML model: rf|svm|nn|kn|dt|gp|gb (def: rf)'],
+    'USERRF':   ['False', '# Use R::randomForest instead of SKLearn Classifier (def: False)'],
+    'USESKL':   ['nn',    '# Use SKLearn ML model: et|rf|svm|nn|kn|dt|gp|gb (def: et)'],
 
-    'FASTA':    [data_dir+'MD_human_kinome_alignment.2019-2.fasta', '# FASTA file of aligned canonical human kinome, with gap'],
-    'BLASTDB':  [data_dir+'MD_human_kinome_alignment.2019.nogap.fasta', '# FASTA file of unaligned canonical human kinome, NO gap'],
+    'FASTA':    [data_dir+'MD_human_kinome_alignment.2019.200324.fasta', '# FASTA file of aligned canonical human kinome, with gap'],
+    'BLASTDB':  [data_dir+'MD_human_kinome_alignment.2019.200324.nogap.fasta', '# FASTA file of unaligned canonical human kinome, NO gap'],
     'REFPDB':   [data_dir+'1ATP_E.pdb',   '# Reference PDB, bovine PKA (1ATP_E)'],
     'REFRES':   ['resi 121-139+162-183',  '# Reference 1ATP_E residues for PyMOL superposition'],
     'OUTEXT':   ['1atp.pdb',        '# Output extension for all 1atp-superposed PDB'],
@@ -83,7 +83,7 @@ def SKLearnDFGModelFiles():
     'rf': 'SK-0221_rf_model_dfg.pkl.bz2', 'svm': 'SK-0221_svm_rbf_model_dfg.pkl.bz2', 
     'nn': 'SK-0221_nn_model_dfg.pkl.bz2', 'kn':  'SK-0221_kn_model_dfg.pkl.bz2', 
     'gb': 'SK-0221_gb_model_dfg.pkl.bz2', 'gp':  'SK-0221_gp_model_dfg.pkl.bz2', 
-    'dt': 'SK-0221_dt_model_dfg.pkl.bz2'  }
+    'dt': 'SK-0221_dt_model_dfg.pkl.bz2', 'et':  'SK-0221_et_model_dfg.pkl.bz2'  }
   return sk_dfg_model
 
 ## SKLearn machine learning models for C-helix/DFG conformation classification
@@ -92,7 +92,7 @@ def SKLearnKinfoModelFiles():
     'rf': 'SK-0221_rf_model_full.pkl.bz2', 'svm': 'SK-0221_svm_lin_model_full.pkl.bz2', 
     'nn': 'SK-0221_nn_model_full.pkl.bz2', 'kn':  'SK-0221_kn_model_full.pkl.bz2', 
     'gb': 'SK-0221_gb_model_full.pkl.bz2', 'gp':  'SK-0221_gp_model_full.pkl.bz2', 
-    'dt': 'SK-0221_dt_model_full.pkl.bz2'  }
+    'dt': 'SK-0221_dt_model_full.pkl.bz2', 'et':  'SK-0221_et_model_full.pkl.bz2'  }
   return sk_chx_model
 
 

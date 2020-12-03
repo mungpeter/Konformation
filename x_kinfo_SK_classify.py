@@ -36,7 +36,7 @@ full_train_cols= ['h_cgvc','ang_NHs','ang_CHs','dist_NH','dist_CH','dfg_conf']
 ## kinase PDB derived Normalization parameter (mean and max), then run thru
 ## the RandomForest model
 
-def KinfoClassify( data_df, lib_dir, outpref, parm, use_sk='rf' ):
+def KinfoClassify( data_df, lib_dir, outpref, parm, use_sk='et' ):
 
   ## make sure the input dataframe has same columns as RF models
   if data_df.columns.isin(Ref_Test_Cols).sum() != len(Ref_Test_Cols):
@@ -102,13 +102,13 @@ def SK_RunML( df, ml_alg, models='' ):
   # append 'dfg_conf' and probability data to traj frame data
   df['dfg_conf'] = data_dfg_pred
   df['dfg_prob'] = np.max(data_dfg_prob, axis=1)
-  print(' \033[34mSK_RF Classify DFG:\033[0m   {:.6f} s'.format((time.perf_counter()-start)))
+  print(' \033[34mSK_{0} Classify DFG:\033[0m   {1:.6f} s'.format(ml_alg, (time.perf_counter()-start)))
 
   ##### classify Chelix/DFG conformation of traj frames #####
   start = time.perf_counter()
   traj_full_pred = rfc_full.predict(df[full_train_cols])
   traj_full_prob = rfc_full.predict_proba(df[full_train_cols])
-  print(' \033[34mSK_RF Classify Kinfo:\033[0m {:.6f} s'.format((time.perf_counter()-start)))
+  print(' \033[34mSK_{0} Classify Kinfo:\033[0m {1:.6f} s'.format(ml_alg, (time.perf_counter()-start)))
 
   ## append 'Class' and probability to traj frame data 
   start = time.perf_counter()

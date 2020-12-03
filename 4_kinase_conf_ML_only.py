@@ -24,7 +24,7 @@ msg ='''
       -mdldir <path>      [ Path to directory with ML models ]
       -out    <prefix>    [ Output prefix ]\n
   Optional:
-      -use_sk <model>     [ Use SKLearn ML model: rf|svm|nn|kn|dt|gp|gb (def: rf) ]
+      -use_sk <model>     [ Use SKLearn ML model: et|rf|svm|nn|kn|dt|gp|gb (def: et) ]
       -use_r_rf           [ Use R::randomForest instead of SKLearn Classifier (def: None) ]\n
 e.g.>  4_kinase_conf_ML_only.py
           -data data.csv  -use_sk gb
@@ -45,9 +45,9 @@ def main():
 
   ## Check input SKL model option
   if args.use_sk is None:
-    args.use_sk = 'rf'
-    print('\033[31m INFO: No -use_sk supplied, fall back to default\033[0m: {0}'.format('rf'))
-  elif args.use_sk not in ['rf','svm','nn','dt','kn','gb','gp']:
+    args.use_sk = 'et'
+    print('\033[31m INFO: No -use_sk supplied, fall back to default\033[0m: {0}'.format('et'))
+  elif args.use_sk not in ['et','rf','svm','nn','dt','kn','gb','gp']:
     sys.exit('\033[31m ERROR: -use_sk is invalid\033[0m: {0}'.format(args.use_sk))
 
 ###################
@@ -85,9 +85,9 @@ def UserInput():
                   help='Path to directory with ML models')
 
   p.add_argument('-use_sk', dest='use_sk', required=False,
-                  help='Use SKLearn ML model: rf|svm|nn|kn|dt|gp|gb (def: rf)')
+                  help='Use SKLearn ML model: et|rf|svm|nn|kn|dt|gp|gb (def: et)')
   p.add_argument('-use_r_rf', action='store_true',
-                  help='Use R::randomForest instead of SKLearn RFClassifier (def: None)')
+                  help='Use R::randomForest instead of SKLearn Classifier (def: None)')
 
   return p.parse_args()
 

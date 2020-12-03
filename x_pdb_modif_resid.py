@@ -20,72 +20,91 @@ def ReplacePDBModifiedAA( in_pdb, out_pdb ):
   with open(in_pdb, 'r') as fi:
     Lines = [ l for l in fi ]
 
-  Edited = []
+  Remark, Edited = [], []
   for l in Lines:
 
-    ### If found atoms with alternate conformation, keep "A" only
+    ### If atom has alternate conformation, keep "A" only
     if re.search('^ATOM|^HETATM|^ANISOU', l) and l[16] != ' ':
       if l[16] == 'A':
         l = l[:16]+' '+l[17:]
       else:
         Edited.append('REMARK  CON '+l)
+        Remark.append('REMARK  CON '+l)
         continue
 
 ##################
 
-    ### If found hetero-group, check
-    if not re.search(r'HETATM', l):
+    ### If not atom data, skip
+    if not re.search(r'^HETATM|^ATOM|^ANISOU', l):
       Edited.append(l)
+
+    ### if it is atom data, no change to natural amino acids
+    elif re.search('ALA|GLY|PRO|VAL|LEU|ILE|MET|ASP|ASN|GLU|GLN|SER|THR|CYS|HIS|LYS|ARG|PHE|TYR|TRP',l):
+      Edited.append(l)
+
+    ### anything that's not natural AA or non-atomic data, check for modified AA
     else:
       ## Replace phospho- residues (Ser, Thr, Tyr, His)
       if re.search(r'SEP|TPO|T8L|PTR|NEP', l):
         Edited.append('REMARK  HET '+l)
+        Remark.append('REMARK  HET '+l)
         m = re.sub('HETATM', 'ATOM  ', l)
         if re.search(r'SEP', l):
           n = re.sub('SEP', 'SER', m)
         if re.search(r'TPO|T8L', l):
           n = re.sub('TPO|T8L', 'THR', m)
-        if re.search(r'PTR', m):
+        if re.search(r'PTR', l):
           n = re.sub('PTR', 'TYR', m)
         if re.search(r'NEP', l):
           n = re.sub('NEP', 'HIS', m)
         if not re.search(r' P  |O1P|O2P|O3P| S1 ', n):
           Edited.append(n)
+
       ## Replace MSE with MET
       elif re.search(r'MSE|MHO', l):
         Edited.append('REMARK  HET '+l)
+        Remark.append('REMARK  HET '+l)
         m = re.sub('HETATM', 'ATOM  ', l)
         n = re.sub(r'MSE|MHO', 'MET', m)
         o = re.sub('SE ', ' SD', n)
         if not re.search(r'OD1', o):
           Edited.append(o)
+
       ## Replace modified CYS
       elif re.search(r'CSO|OCS|CSX|CSD|2CO|CME|CSS', l):
         Edited.append('REMARK  HET '+l)
+        Remark.append('REMARK  HET '+l)
         m = re.sub('HETATM', 'ATOM  ', l)
         n = re.sub(r'CSO|OCS|CSX|CSD|2CO|CME|CSS', 'CYS', m)
         if not re.search(r' OD|OD1|OD2|OD3| OE| SD| CE| CZ| OH', n):
           Edited.append(n)
+
       ## Replace modified LYS
       elif re.search(r'KCX|ALY|MLY', l):
         Edited.append('REMARK  HET '+l)
+        Remark.append('REMARK  HET '+l)
         m = re.sub('HETATM', 'ATOM  ', l)
         n = re.sub(r'KCX|ALY|MLY', 'LYS', m)
         if not re.search(r'CX |OQ1|OQ2|CH3|CH |OH |CH1|CH2', n):
           Edited.append(n)
+
       ## Replace modified ARG
       elif re.search(r'NMM', l):
         Edited.append('REMARK  HET '+l)
+        Remark.append('REMARK  HET '+l)
         m = re.sub('HETATM', 'ATOM  ', l)
         n = re.sub(r'NMM', 'ARG', m)
-        if not re.search(r'CAA', m):
+        if not re.search(r'CAA', n):
           Edited.append(n)
+
+      ## Leave ligands alone
       else:
         Edited.append(l)
 
-
-  with open(out_pdb, 'w') as fo:
-    for l in Edited:
-      fo.write(l)
+  ## Write out a new file only if PDB has modified/unnatural AA in it
+  if len(Remark):
+    with open(out_pdb, 'w') as fo:
+      for l in Edited:
+        fo.write(l)
 
 ########################################################################

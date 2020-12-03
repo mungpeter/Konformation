@@ -60,8 +60,8 @@ Format of PDB list, as as "WTNEWKINASE" setting from 1_find_new_kinase_pdb.py:
 
 - This script extracts the coordinates of key residues and calculate the structural parameters, which are then used in the conformation classification. This script generates **two** result files, one with structural parameters and another one with conformation of the input PDB structures.
 
-- The _default_ Machine Learning algorithm used here is the **SKLearn** version of the **Random Forest (RF)** model, instead of the _R RF_ model used in the original article. However, since both R and SKLearn RF models are trained on the same dataset and used similar settings, the results from both models are very similar and should be interchangable. 
-- In addition to _SKLearn RF_ model, I have created additional models that have similar or better accuracy to the original R RF model: _Neural Network (nn)_, _Gradient Boosting (gb)_, _K-nearest Neighbors (kn)_, _Decision Tree (dt)_, _Gaussian Process (gp)_, and _Support-Vector Machine (svm)_ (see my [/Kinformation_MD GitHub](https://github.com/mungpeter/Kinformation_MD) for out-of-bag errors). It appears _nn, kn, gb, svm_ models perform a slight bit better than _rf, dt_ models.
+- The _default_ Machine Learning algorithm used here is the **SKLearn** version of the **Extra Trees (ET)** model, instead of the _R Random Forest (RF)_ model used in the original article. However, since both R and SKLearn models are trained on the same dataset and used similar settings, the results from both models are very similar and should be interchangable. 
+- In addition to _SKLearn RF_ model, I have created additional models that have similar or better accuracy to the original R RF model: _Extra Tree (et)_, _Neural Network (nn)_, _Gradient Boosting (gb)_, _K-nearest Neighbors (kn)_, _Decision Tree (dt)_, _Gaussian Process (gp)_, and _Support-Vector Machine (svm)_ (see my [/Kinformation_MD GitHub](https://github.com/mungpeter/Kinformation_MD) for out-of-bag errors). It appears _et, nn, kn, gb, svm_ models (oob error: 1.5%) perform a slight bit better than _rf, dt_ models (oob err: 3.1%). (_ExtraTrees (et) is a new ensemble ML method new to sklearn and it is implemented here on 2020.11.29_)
 
 - Note, the current SKL ML models used here are from SKL _0.22.1_, which may not be backward compatible with newer SKL version in the future. In such even, will need to use [/Kinformation_MD/0_kinfo_SK_model_gen.py](https://github.com/mungpeter/Kinformation_MD/0_kinfo_SK_model_gen.py) to generate newer version of MK model for use.
 
@@ -106,7 +106,7 @@ e.g.)
     -out    <prefix>    [ Output prefix ]
 
   Optional:
-    -use_sk <model>     [ Use SKLearn ML model: rf|svm|nn|kn|dt|gp|gb (def: rf) ]
+    -use_sk <model>     [ Use SKLearn ML model: et|rf|svm|nn|kn|dt|gp|gb (def: et) ]
 
 e.g.>  4_kinase_conf_ML_only.py
           -data data.csv  -use_sk gb
